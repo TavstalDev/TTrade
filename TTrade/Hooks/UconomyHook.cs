@@ -11,7 +11,7 @@ using Tavstal.TLibrary.Extensions;
 using Tavstal.TLibrary.Models.Economy;
 using Tavstal.TLibrary.Models.Hooks;
 
-namespace Tavstal.TExample.Hooks
+namespace Tavstal.Trade.Hooks
 {
     // ReSharper disable once ClassNeverInstantiated.Global
     public class UconomyHook : Hook, IEconomyProvider
@@ -26,14 +26,14 @@ namespace Tavstal.TExample.Hooks
         private object _uconomyConfig;
 
 
-        public UconomyHook() : base(ExampleMain.Instance, "thook_uconomy", true) { }
+        public UconomyHook() : base(TTrade.Instance, "thook_uconomy", true) { }
 
         public override void OnLoad()
         {
             try
             {
 
-                ExampleMain.Logger.Log("Loading Uconomy hook...");
+                TTrade.Logger.Log("Loading Uconomy hook...");
                 IRocketPlugin plugin = R.Plugins.GetPlugins().FirstOrDefault(c => c.Name.EqualsIgnoreCase("uconomy"));
                 if (plugin == null)
                     throw new Exception("Could not find plugin.");
@@ -103,14 +103,14 @@ namespace Tavstal.TExample.Hooks
                 }*/
                 #endregion
 
-                ExampleMain.Logger.LogException("Currency Name >> " + GetCurrencyName());
-                ExampleMain.Logger.LogException("Initial Balance >> " + GetConfigValue<decimal>("InitialBalance"));
-                ExampleMain.Logger.Log("Uconomy hook loaded.");
+                TTrade.Logger.LogException("Currency Name >> " + GetCurrencyName());
+                TTrade.Logger.LogException("Initial Balance >> " + GetConfigValue<decimal>("InitialBalance"));
+                TTrade.Logger.Log("Uconomy hook loaded.");
             }
             catch (Exception e)
             {
-                ExampleMain.Logger.LogError("Failed to load Uconomy hook");
-                ExampleMain.Logger.LogError(e.ToString());
+                TTrade.Logger.LogError("Failed to load Uconomy hook");
+                TTrade.Logger.LogError(e.ToString());
             }
         }
 
@@ -138,7 +138,7 @@ namespace Tavstal.TExample.Hooks
                 }
                 catch
                 {
-                    ExampleMain.Logger.LogError($"Failed to get '{variableName}' variable!");
+                    TTrade.Logger.LogError($"Failed to get '{variableName}' variable!");
                     return default;
                 }
             }
@@ -152,7 +152,7 @@ namespace Tavstal.TExample.Hooks
             }
             catch
             {
-                ExampleMain.Logger.LogError($"Failed to get config jobj.");
+                TTrade.Logger.LogError($"Failed to get config jobj.");
                 return null;
             }
         }

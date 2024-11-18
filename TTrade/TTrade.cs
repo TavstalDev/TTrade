@@ -1,27 +1,23 @@
 ﻿using SDG.Unturned;
 using System.Collections.Generic;
-using Tavstal.TExample.Handlers;
-using Tavstal.TExample.Hooks;
-using Tavstal.TExample.Managers;
+using Tavstal.Trade.Handlers;
+using Tavstal.Trade.Hooks;
+using Tavstal.Trade.Managers;
 using Tavstal.TLibrary.Models.Plugin;
 using Tavstal.TLibrary.Models.Hooks;
 using Tavstal.TLibrary.Managers;
+using Tavstal.Trade.Models;
 
-namespace Tavstal.TExample
+namespace Tavstal.Trade
 {
     /// <summary>
     /// The main plugin class.
     /// </summary>
-    public class ExampleMain : PluginBase<ExampleConfig>
+    // ReSharper disable once InconsistentNaming
+    public class TTrade : PluginBase<TradeConfig>
     {
-        public static ExampleMain Instance { get; private set; }
-        public new static readonly TLogger Logger = new TLogger("TExample", false);
-        public static DatabaseManager DatabaseManager { get; private set; }
-        /// <summary>
-        /// Used to prevent error spamming that is related to database configuration.
-        /// </summary>
-        public static bool IsConnectionAuthFailed { get; set; }
-        public static IEconomyProvider EconomyProvider { get; private set; }
+        public static TTrade Instance { get; private set; }
+        public new static readonly TLogger Logger = new TLogger("TTrade", false);
 
         /// <summary>
         /// Fired when the plugin is loaded.
@@ -52,10 +48,6 @@ namespace Tavstal.TExample
             Logger.Log($"# Build Date: {BuildDate}");
             Logger.Log("#########################################");
 
-            DatabaseManager = new DatabaseManager(this, Config);
-            if (IsConnectionAuthFailed)
-                return;
-
             Logger.Log($"# {GetPluginName()} has been loaded.");
         }
 
@@ -71,26 +63,8 @@ namespace Tavstal.TExample
 
         private void Event_OnPluginsLoaded(int i)
         {
-            if (IsConnectionAuthFailed)
-            {
-                Logger.LogWarning($"# Unloading {GetPluginName()} due to database authentication error.");
-                this?.UnloadPlugin();
-                return;
-            }
-
             Logger.LogLateInit();
-            Logger.LogWarning("# Searching for economy plugin...");
-            // Create HookManager and load all hooks
-            HookManager = new HookManager(this);
-            HookManager.LoadAll(Assembly);
-
-            if (!HookManager.IsHookLoadable<UconomyHook>())
-            {
-                Logger.LogError($"# Failed to load economy hook. Unloading {GetPluginName()}...");
-                this?.UnloadPlugin();
-                return;
-            }
-            EconomyProvider = HookManager.GetHook<UconomyHook>();
+            
         }
 
 

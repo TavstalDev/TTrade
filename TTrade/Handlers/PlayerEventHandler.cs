@@ -1,8 +1,8 @@
 ﻿using Rocket.Unturned;
 using Rocket.Unturned.Player;
-using Tavstal.TExample.Models;
+using Tavstal.Trade.Models;
 
-namespace Tavstal.TExample.Handlers
+namespace Tavstal.Trade.Handlers
 {
     public static class PlayerEventHandler
     {
@@ -30,16 +30,7 @@ namespace Tavstal.TExample.Handlers
 
         private static async void OnPlayerConnected(UnturnedPlayer player)
         {
-            PlayerData data = await ExampleMain.DatabaseManager.FindPlayer(player.CSteamID.m_SteamID);
-            if (data == null)
-            {
-                await ExampleMain.DatabaseManager.AddPlayer(player.CSteamID.m_SteamID, player.SteamName, player.CharacterName);
-            }
-            else
-            {
-                if (data.LastCharacterName != player.CharacterName)
-                    await ExampleMain.DatabaseManager.UpdatePlayer(player.CSteamID.m_SteamID, player.CharacterName);
-            }
+           
         }
     }
 }

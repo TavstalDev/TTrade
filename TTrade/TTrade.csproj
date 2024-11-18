@@ -6,12 +6,12 @@
     <ProjectGuid>{513EF5A5-B1FA-417C-952E-CD773F5B1782}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Tavstal.TExample</RootNamespace>
-    <AssemblyName>TExample</AssemblyName>
+    <RootNamespace>Tavstal.Trade</RootNamespace>
     <TargetFramework>net48</TargetFramework>
     <FileAlignment>512</FileAlignment>
     <Deterministic>false</Deterministic>
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+    <PackageId>TTrade</PackageId>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Assembly-CSharp">
