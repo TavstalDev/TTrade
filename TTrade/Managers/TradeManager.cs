@@ -8,8 +8,19 @@ using UnityEngine;
 
 namespace Tavstal.Trade.Managers
 {
+    /// <summary>
+    /// Provides functionality for managing trade interactions between players.
+    /// </summary>
     public static class TradeManager
     {
+        /// <summary>
+        /// Sends a trade request from one <see cref="UnturnedPlayer"/> to another.
+        /// </summary>
+        /// <param name="tradeStarter">The <see cref="UnturnedPlayer"/> initiating the trade request.</param>
+        /// <param name="tradeReceiver">The <see cref="UnturnedPlayer"/> receiving the trade request.</param>
+        /// <returns>
+        /// <c>true</c> if the trade request was successfully sent; otherwise, <c>false</c>.
+        /// </returns>
         public static bool SendTradeRequest(UnturnedPlayer tradeStarter, UnturnedPlayer tradeReceiver)
         {
             bool success = false;
@@ -63,6 +74,14 @@ namespace Tavstal.Trade.Managers
             return success;
         }
 
+        /// <summary>
+        /// Accepts a trade request between two <see cref="UnturnedPlayer"/> instances.
+        /// </summary>
+        /// <param name="tradeReceiver">The <see cref="UnturnedPlayer"/> who is accepting the trade request.</param>
+        /// <param name="tradeSender">The <see cref="UnturnedPlayer"/> who initiated the trade request.</param>
+        /// <returns>
+        /// <c>true</c> if the trade request was successfully accepted; otherwise, <c>false</c>.
+        /// </returns>
         public static bool AcceptTradeRequest(UnturnedPlayer tradeReceiver, UnturnedPlayer tradeSender)
         {
             bool success = false;
@@ -114,6 +133,14 @@ namespace Tavstal.Trade.Managers
             return success;
         }
         
+        /// <summary>
+        /// Denies a trade request between two <see cref="UnturnedPlayer"/> instances.
+        /// </summary>
+        /// <param name="tradeReceiver">The <see cref="UnturnedPlayer"/> who is denying the trade request.</param>
+        /// <param name="tradeSender">The <see cref="UnturnedPlayer"/> who initiated the trade request.</param>
+        /// <returns>
+        /// <c>true</c> if the trade request was successfully denied; otherwise, <c>false</c>.
+        /// </returns>
         public static bool DenyTradeRequest(UnturnedPlayer tradeReceiver, UnturnedPlayer tradeSender)
         {
             bool success = false;
@@ -161,6 +188,13 @@ namespace Tavstal.Trade.Managers
             return success;
         }
         
+        /// <summary>
+        /// Cancels an ongoing trade involving the specified <see cref="UnturnedPlayer"/>.
+        /// </summary>
+        /// <param name="player">The <see cref="UnturnedPlayer"/> who is canceling the trade.</param>
+        /// <returns>
+        /// <c>true</c> if the trade was successfully canceled; otherwise, <c>false</c>.
+        /// </returns>
         public static bool CancelTrade(UnturnedPlayer player)
         {
             bool success = false;
@@ -209,6 +243,13 @@ namespace Tavstal.Trade.Managers
             return success;
         }
         
+        /// <summary>
+        /// Approves an ongoing trade involving the specified <see cref="UnturnedPlayer"/>.
+        /// </summary>
+        /// <param name="player">The <see cref="UnturnedPlayer"/> who is approving the trade.</param>
+        /// <returns>
+        /// <c>true</c> if the trade was successfully approved; otherwise, <c>false</c>.
+        /// </returns>
         public static bool ApproveTrade(UnturnedPlayer player)
         {
             bool success = false;
@@ -244,6 +285,13 @@ namespace Tavstal.Trade.Managers
             return success;
         }
         
+        /// <summary>
+        /// Finalizes an ongoing trade involving the specified <see cref="UnturnedPlayer"/>.
+        /// </summary>
+        /// <param name="player">The <see cref="UnturnedPlayer"/> who is completing the trade.</param>
+        /// <returns>
+        /// <c>true</c> if the trade was successfully finalized; otherwise, <c>false</c>.
+        /// </returns>
         public static bool FinishTrade(UnturnedPlayer player)
         {
             bool success = false;

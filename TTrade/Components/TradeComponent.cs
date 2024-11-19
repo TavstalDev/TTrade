@@ -10,5 +10,7 @@ namespace Tavstal.Trade.Components
         public ulong TradePartner;
         public Guid VaultId;
         public readonly List<ulong> TradeRequests = new List<ulong>();
+        
+        public TradeComponent() {}
     }
 }
