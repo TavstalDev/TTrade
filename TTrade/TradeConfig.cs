@@ -1,5 +1,4 @@
 ﻿using Newtonsoft.Json;
-using Tavstal.Trade.Models;
 using Tavstal.TLibrary.Models.Plugin;
 
 namespace Tavstal.Trade
