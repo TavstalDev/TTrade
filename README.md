@@ -1,22 +1,15 @@
-# TTrade (WIP)
+# TTrade
 
 ### What is this?
 This is the source code of a .NETFramework library written in C#. This library is a plugin made for Unturned 3.24.x+ servers. 
 
 ### Description
-An user-friendly item and vehicle shop plugin supporting async (mysql) database. 
+Basic trading system in Unturned
 
 ### Features
-* Customizable item shop
-* Customizable vehicle shop
-* Custom HUD
-* Discount system
-* Async SQL Database
-* Supports economy plugins that are based on Uconomy
-
-### Requirements
-- [Uconomy](https://github.com/Rawrfuls/Uconomy/releases/download/1.2/Uconomy.zip), [Uconomy2](https://github.com/TavstalDev/Uconomy) or other economy plugin
-- [Workshop](https://steamcommunity.com/sharedfiles/filedetails/?id=2767766199)
+* Secure Item Trading
+* Trade Preview
+* Custom Vault Size
 
 ### Commands
 | - means <b>or</b></br>
@@ -24,112 +17,52 @@ An user-friendly item and vehicle shop plugin supporting async (mysql) database.
 <> - means <b>optional</b>
 
 ---
-### Player Commands
+
 <details>
-<summary>/buy [itemID | itemName] <amount></summary>
-<b>Description:</b> Buys a specific amount of item(s).
+<summary>/trade [player]</summary>
+<b>Description:</b> Send trade request to a player
 <br>
-<b>Permission(s):</b> tshop.commands.buy.item
+<b>Permission(s):</b> ttzones.command.trade
 </details>
 
 <details>
-<summary>/buyvehicle [vehicleID]</summary>
-<b>Description:</b> Buys a specific vehicle.
+<summary>/trade accept [player]</summary>
+<b>Description:</b>Accept a pending trade request.
 <br>
-<b>Permission(s):</b> tshop.commands.buy.vehicle
-<br>
+<b>Permission(s):</b> ttzones.command.accept
 </details>
 
 <details>
-<summary>/cost [itemID]</summary>
-<b>Description:</b> Checks the cost of a specific item.
+<summary>/trade deny [player]</summary>
+<b>Description:</b> Decline a trade request.
 <br>
-<b>Permission(s):</b>  tshop.commands.cost.item
+<b>Permission(s):</b> ttzones.command.deny
 </details>
 
 <details>
-<summary>/costvehicle [vehicleID] <amount></summary>
-<b>Description:</b> Checks the cost of a specific vehicle.
+<summary>/trade cancel</summary>
+<b>Description:</b> Cancel an ongoing trade.
 <br>
-<b>Permission(s):</b> tshop.commands.cost.vehicle
+<b>Permission(s):</b> ttzones.command.cancel
 </details>
 
 <details>
-<summary>/sell [itemID] <amount></summary>
-<b>Description:</b> Sells a specific amount of item(s).
+<summary>/trade open</summary>
+<b>Description:</b> Open the trade inventory.
 <br>
-<b>Permission(s):</b> tshop.commands.sell.item
+<b>Permission(s):</b> ttzones.command.open
 </details>
 
 <details>
-<summary>/sellvehicle <amount></summary>
-<b>Description:</b> Sells the current vehicle.
+<summary>/trade view</summary>
+<b>Description:</b> View the other player's trade inventory.
 <br>
-<b>Permission(s):</b> tshop.commands.sell.vehicle
+<b>Permission(s):</b> ttzones.command.view
 </details>
 
 <details>
-<summary>/shop</summary>
-<b>Description:</b> Opens the UI.
+<summary>/trade finish</summary>
+<b>Description:</b> Complete, then finalize the trade.
 <br>
-<b>Permission(s):</b> tshop.commands.shopui
-</details>
-
----
-### Admin Commands
-
-<details>
-<summary>/itemshop add [item name | id] [buycost] [sellcost] <permission></summary>
-<b>Description:</b> Manages the item shop.
-<br>
-<b>Permission(s):</b>  tshop.commands.itemshop, tshop.commands.itemshop.add
-</details>
-
-<details>
-<summary>/itemshop remove  [item name | id]</summary>
-<b>Description:</b> Manages the item shop.
-<br>
-<b>Permission(s):</b>  tshop.commands.itemshop, tshop.commands.itemshop.remove
-</details>
-
-<details>
-<summary>/itemshop update [item name | id] [buycost] [sellcost] <permission></summary>
-<b>Description:</b> Manages the item shop.
-<br>
-<b>Permission(s):</b>  tshop.commands.itemshop, tshop.commands.itemshop.update
-</details>
-
-<details>
-<summary>/vehicleshop add [vehicle name | id] <buycost> <sellcost> <hexColor> <permission></summary>
-<b>Description:</b> Manages the vehicle shop.
-<br>
-<b>Permission(s):</b>  tshop.commands.vehicleshop, tshop.commands.vehicleshop.add
-</details>
-
-<details>
-<summary>/vehicleshop remove  [vehicle name | id]</summary>
-<b>Description:</b> Manages the vehicle shop.
-<br>
-<b>Permission(s):</b> tshop.commands.vehicleshop, tshop.commands.vehicleshop.remove
-</details>
-
-<details>
-<summary>/vehicleshop color  [vehicle name | id] [hexColor]</summary>
-<b>Description:</b> Manages the vehicle shop.
-<br>
-<b>Permission(s):</b> tshop.commands.vehicleshop, tshop.commands.vehicleshop.color
-</details>
-
-<details>
-<summary>/vehicleshop update [vehicle name | id] <buycost> <sellcost> <permission></summary>
-<b>Description:</b> Manages the vehicle shop.
-<br>
-<b>Permission(s):</b>  tshop.commands.vehicleshop, tshop.commands.vehicleshop.update
-</details>
-
-<details>
-<summary>/migratezaupdb [itemtablename] [vehicletablename]</summary>
-<b>Description:</b> Migrates data from the database of the zaupshop plugin.
-<br>
-<b>Permission(s):</b>  tshop.commands.migratezaupdb
+<b>Permission(s):</b> ttzones.command.finish
 </details>
