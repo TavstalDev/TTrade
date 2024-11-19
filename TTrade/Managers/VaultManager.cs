@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using Rocket.Unturned.Player;
 using SDG.Unturned;
-using Tavstal.TLibrary.Helpers.Unturned;
 using Tavstal.Trade.Components;
 using Tavstal.Trade.Models;
 using UnityEngine;
@@ -11,75 +10,58 @@ namespace Tavstal.Trade.Managers
 {
     public static class VaultManager
     {
-        private static Dictionary<Guid, VaultStorage> _vaultList = new Dictionary<Guid, VaultStorage>();
+        // ReSharper disable once InconsistentNaming
+        private static readonly Dictionary<Guid, VaultStorage> _vaultList = new Dictionary<Guid, VaultStorage>();
         public static Dictionary<Guid, VaultStorage> VaultList => _vaultList;
 
-        public static bool SendTradeRequest(UnturnedPlayer tradeStarter, UnturnedPlayer tradeReceiver)
+        private static VaultStorage AddVault(UnturnedPlayer player)
         {
-            bool success = false;
-
-            try
+            ItemBarricadeAsset barricadeAsset = Assets.find(EAssetType.ITEM, 328) as ItemBarricadeAsset;
+            Transform transform = BarricadeManager.dropBarricade(new Barricade(barricadeAsset), null, new Vector3(player.Position.x, -100, player.Position.z), 0, 0, 0, ulong.Parse(player.Id), 29832);
+            BarricadeDrop drop = BarricadeManager.FindBarricadeByRootTransform(transform);
+            if (drop == null)
+                return null;
+            
+            TradeComponent comp = player.GetComponent<TradeComponent>();
+            comp.VaultId = Guid.NewGuid();
+            VaultStorage storage = new VaultStorage
             {
-                float distance = Vector3.Distance(tradeStarter.Position, tradeReceiver.Position);
-                if (distance > TTrade.Instance.Config.Distance)
-                {
-                    TTrade.Instance.SendCommandReply(tradeStarter, "error_trade_distance", distance, TTrade.Instance.Config.Distance);
-                    return false;
-                }
-
-                if (tradeStarter.Id == tradeReceiver.Id)
-                {
-                    TTrade.Instance.SendCommandReply(tradeStarter, "error_self_trade");
-                    return false;
-                }
-
-                TradeComponent startetComp = tradeStarter.GetComponent<TradeComponent>();
-                TradeComponent receiverComp = tradeReceiver.GetComponent<TradeComponent>();
-                if (!(startetComp.State == ETradeState.None || startetComp.State == ETradeState.Pending))
-                {
-                    TTrade.Instance.SendCommandReply(tradeStarter, "error_already_trading");
-                    return false;
-                }
-
-                if (!(receiverComp.State == ETradeState.None || receiverComp.State == ETradeState.Pending))
-                {
-                    TTrade.Instance.SendCommandReply(tradeStarter, "error_trade_target_busy", tradeReceiver.CharacterName);
-                    return false;
-                }
-
-                if (receiverComp.TradeRequests.Contains(tradeStarter.CSteamID.m_SteamID))
-                {
-                    TTrade.Instance.SendCommandReply(tradeStarter, "error_trade_request_already_sent", tradeReceiver.CharacterName);
-                    return false;
-                }
-                    
-                startetComp.State = ETradeState.Pending;
-                receiverComp.TradeRequests.Add(tradeStarter.CSteamID.m_SteamID);
-                success = true;
-
-                TTrade.Instance.SendCommandReply(tradeStarter, "success_trade_request_sent", tradeReceiver.CharacterName);
-                TTrade.Instance.SendCommandReply(tradeReceiver, "success_trade_request_received", tradeStarter.CharacterName);
-            }
-            catch (Exception ex)
-            {
-                TTrade.Logger.LogException("Error in SendTradeRequest:");
-                TTrade.Logger.LogError(ex);
-            }
-
-            return success;
+                SizeX = TTrade.Instance.Config.TradeRowX,
+                SizeY = TTrade.Instance.Config.TradeRowY,
+                StorageDrop = drop
+            };
+            _vaultList.Add(comp.VaultId, storage);
+            return storage;
         }
         
-        public static void RemoveVault(Guid id)
+        public static void OpenVault(UnturnedPlayer player, Guid guid, bool edit)
+        {
+            if (!_vaultList.TryGetValue(guid, out VaultStorage vaultStorage))
+                vaultStorage = AddVault(player);
+            
+            InteractableStorage interactableStorage = (InteractableStorage)vaultStorage.StorageDrop.interactable;
+            interactableStorage.items.resize((byte)vaultStorage.SizeX, (byte)vaultStorage.SizeY);
+            interactableStorage.isOpen = true;
+            interactableStorage.opener = player.Player;
+            player.Inventory.isStoring = !edit;
+            player.Inventory.storage = interactableStorage;
+            player.Inventory.updateItems(PlayerInventory.STORAGE, interactableStorage.items);
+            player.Inventory.sendStorage();
+        }
+        
+        public static void RemoveVault(UnturnedPlayer player, Guid id, bool keepItems)
         {
             if (_vaultList.TryGetValue(id, out VaultStorage vault))
             {
-                BarricadeDrop drop = BarricadeManager.FindBarricadeByRootTransform(vault.LockerTransform);
-                if (drop == null)
-                    return;
+                BarricadeData barricadeData = vault.StorageDrop.GetServersideData();
+                InteractableStorage interactableStorage = (InteractableStorage)vault.StorageDrop.interactable;
 
-                BarricadeData barricadeData = drop.GetServersideData();
-
-                InteractableStorage interactableStorage = (InteractableStorage)drop.interactable;
+                if (keepItems)
+                {
+                    foreach (var itemJar in interactableStorage.items.items)
+                        player.Inventory.forceAddItem(itemJar.item, false);
+                }
+                
                 interactableStorage.items.clear();
                 barricadeData.barricade.askDamage(ushort.MaxValue);
                 _vaultList.Remove(id);
