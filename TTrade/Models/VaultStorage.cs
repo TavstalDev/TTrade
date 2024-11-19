@@ -1,29 +1,24 @@
 using Newtonsoft.Json;
 using SDG.Unturned;
-using UnityEngine;
 
 namespace Tavstal.Trade.Models
 {
     public class VaultStorage
     {
-        [JsonProperty("lockerTransform")]
-        public Transform LockerTransform;
-        [JsonProperty("isOpened")]
-        public bool IsOpened;
-        [JsonProperty("items")]
-        public Items ItemList;
+        [JsonProperty("storageDrop")] 
+        public BarricadeDrop StorageDrop;
         [JsonProperty("sizeX")]
         public int SizeX;
         [JsonProperty("sizeY")]
         public int SizeY;
-        
-        public VaultStorage() { }
 
-        public VaultStorage(Transform lockerTransform, bool isOpened, Items itemList, int sizeX, int sizeY)
+        public VaultStorage()
         {
-            LockerTransform = lockerTransform;
-            IsOpened = isOpened;
-            ItemList = itemList;
+        }
+
+        public VaultStorage(BarricadeDrop drop, int sizeX, int sizeY)
+        {
+            StorageDrop = drop;
             SizeX = sizeX;
             SizeY = sizeY;
         }
