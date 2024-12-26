@@ -2,10 +2,10 @@
 using Rocket.Unturned;
 using Rocket.Unturned.Player;
 using Tavstal.Trade.Components;
-using Tavstal.Trade.Managers;
 using Tavstal.Trade.Models;
+using Tavstal.Trade.Utils.Managers;
 
-namespace Tavstal.Trade.Handlers
+namespace Tavstal.Trade.Utils.Handlers
 {
     public static class PlayerEventHandler
     {

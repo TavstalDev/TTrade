@@ -7,8 +7,8 @@ using Tavstal.TLibrary.Models.Commands;
 using Tavstal.TLibrary.Models.Plugin;
 using Tavstal.TLibrary.Helpers.Unturned;
 using Tavstal.Trade.Components;
-using Tavstal.Trade.Managers;
 using Tavstal.Trade.Models;
+using Tavstal.Trade.Utils.Managers;
 using UnityEngine;
 
 namespace Tavstal.Trade.Commands

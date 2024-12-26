@@ -1,9 +1,9 @@
 ﻿using System.Collections.Generic;
-using Tavstal.Trade.Handlers;
-using Tavstal.Trade.Managers;
 using Tavstal.TLibrary.Models.Plugin;
 using Tavstal.Trade.Components;
 using Tavstal.Trade.Models;
+using Tavstal.Trade.Utils.Handlers;
+using Tavstal.Trade.Utils.Managers;
 
 namespace Tavstal.Trade
 {

@@ -6,7 +6,7 @@ using Tavstal.Trade.Components;
 using Tavstal.Trade.Models;
 using UnityEngine;
 
-namespace Tavstal.Trade.Managers
+namespace Tavstal.Trade.Utils.Managers
 {
     /// <summary>
     /// Provides functionality for managing trade interactions between players.

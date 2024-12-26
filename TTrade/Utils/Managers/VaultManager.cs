@@ -6,7 +6,7 @@ using Tavstal.Trade.Components;
 using Tavstal.Trade.Models;
 using UnityEngine;
 
-namespace Tavstal.Trade.Managers
+namespace Tavstal.Trade.Utils.Managers
 {
     /// <summary>
     /// Manages the vault system for storing and retrieving player-specific data.
