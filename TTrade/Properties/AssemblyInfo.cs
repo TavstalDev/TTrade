@@ -5,11 +5,11 @@ using System.Runtime.InteropServices;
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
 [assembly: AssemblyTitle("TTrade")]
-[assembly: AssemblyDescription("Basic trading system in Unturned ")]
+[assembly: AssemblyDescription("A simple and secure trading system for Unturned.")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("Tavstal")]
 [assembly: AssemblyProduct("TTrade")]
-[assembly: AssemblyCopyright("Copyright © 2024 Tavstal")]
+[assembly: AssemblyCopyright("Copyright © 2025 Tavstal")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("en")]
 

@@ -14,7 +14,6 @@ namespace Tavstal.Trade
     public class TTrade : PluginBase<TradeConfig>
     {
         public static TTrade Instance { get; private set; }
-        public new static readonly TLogger Logger = new TLogger("TTrade", false);
 
         /// <summary>
         /// Fired when the plugin is loaded.
