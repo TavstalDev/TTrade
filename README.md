@@ -22,47 +22,47 @@ A simple and secure trading system for Unturned.
 <summary>/trade [player]</summary>
 <b>Description:</b> Send trade request to a player
 <br>
-<b>Permission(s):</b> ttzones.command.trade
+<b>Permission(s):</b> ttrade.command.trade
 </details>
 
 <details>
 <summary>/trade accept [player]</summary>
 <b>Description:</b>Accept a pending trade request.
 <br>
-<b>Permission(s):</b> ttzones.command.trade.accept
+<b>Permission(s):</b> ttrade.command.trade.accept
 </details>
 
 <details>
 <summary>/trade deny [player]</summary>
 <b>Description:</b> Decline a trade request.
 <br>
-<b>Permission(s):</b> ttzones.command.trade.deny
+<b>Permission(s):</b> ttrade.command.trade.deny
 </details>
 
 <details>
 <summary>/trade cancel</summary>
 <b>Description:</b> Cancel an ongoing trade.
 <br>
-<b>Permission(s):</b> ttzones.command.trade.cancel
+<b>Permission(s):</b> ttrade.command.trade.cancel
 </details>
 
 <details>
 <summary>/trade open</summary>
 <b>Description:</b> Open the trade inventory.
 <br>
-<b>Permission(s):</b> ttzones.command.trade.open
+<b>Permission(s):</b> ttrade.command.trade.open
 </details>
 
 <details>
 <summary>/trade view</summary>
 <b>Description:</b> View the other player's trade inventory.
 <br>
-<b>Permission(s):</b> ttzones.command.trade.view
+<b>Permission(s):</b> ttrade.command.trade.view
 </details>
 
 <details>
 <summary>/trade finish</summary>
 <b>Description:</b> Complete, then finalize the trade.
 <br>
-<b>Permission(s):</b> ttzones.command.trade.finish
+<b>Permission(s):</b> ttrade.command.trade.finish
 </details>
