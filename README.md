@@ -1,5 +1,11 @@
 # TTrade
 
+![Release (latest by date)](https://img.shields.io/github/v/release/TavstalDev/TTrade?style=plastic-square)
+![Workflow Status](https://img.shields.io/github/actions/workflow/status/TavstalDev/TTrade/release.yml?branch=stable&label=build&style=plastic-square)
+![License](https://img.shields.io/github/license/TavstalDev/TTrade?style=plastic-square)
+![Downloads](https://img.shields.io/github/downloads/TavstalDev/TTrade/total?style=plastic-square)
+![Issues](https://img.shields.io/github/issues/TavstalDev/TTrade?style=plastic-square)
+
 ### What is this?
 This is the source code of a .NETFramework library written in C#. This library is a plugin made for Unturned 3.24.x+ servers. 
 
