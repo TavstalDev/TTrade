@@ -85,8 +85,8 @@ namespace Tavstal.Trade.Hooks
                 }
                 catch (Exception ex)
                 {
-                    ExampleMain.Logger.LogError("Uconomy hook onPlayerPay delegate error:");
-                    ExampleMain.Logger.LogError(ex.ToString());
+                    ExampleMain.Logger.Error("Uconomy hook onPlayerPay delegate error:");
+                    ExampleMain.Logger.Error(ex.ToString());
                 }
 
                 try
@@ -98,19 +98,19 @@ namespace Tavstal.Trade.Hooks
                 }
                 catch (Exception ex)
                 {
-                    ExampleMain.Logger.LogError("Uconomy hook onBalanceUpdate delegate error:");
-                    ExampleMain.Logger.LogError(ex.ToString());
+                    ExampleMain.Logger.Error("Uconomy hook onBalanceUpdate delegate error:");
+                    ExampleMain.Logger.Error(ex.ToString());
                 }*/
                 #endregion
 
-                TTrade.Logger.LogException("Currency Name >> " + GetCurrencyName());
-                TTrade.Logger.LogException("Initial Balance >> " + GetConfigValue<decimal>("InitialBalance"));
+                TTrade.Logger.Exception("Currency Name >> " + GetCurrencyName());
+                TTrade.Logger.Exception("Initial Balance >> " + GetConfigValue<decimal>("InitialBalance"));
                 TTrade.Logger.Log("Uconomy hook loaded.");
             }
             catch (Exception e)
             {
-                TTrade.Logger.LogError("Failed to load Uconomy hook");
-                TTrade.Logger.LogError(e.ToString());
+                TTrade.Logger.Error("Failed to load Uconomy hook");
+                TTrade.Logger.Error(e.ToString());
             }
         }
 
@@ -138,7 +138,7 @@ namespace Tavstal.Trade.Hooks
                 }
                 catch
                 {
-                    TTrade.Logger.LogError($"Failed to get '{variableName}' variable!");
+                    TTrade.Logger.Error($"Failed to get '{variableName}' variable!");
                     return default;
                 }
             }
@@ -152,7 +152,7 @@ namespace Tavstal.Trade.Hooks
             }
             catch
             {
-                TTrade.Logger.LogError($"Failed to get config jobj.");
+                TTrade.Logger.Error($"Failed to get config jobj.");
                 return null;
             }
         }

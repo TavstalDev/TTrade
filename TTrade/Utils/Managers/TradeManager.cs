@@ -67,8 +67,8 @@ namespace Tavstal.Trade.Utils.Managers
             }
             catch (Exception ex)
             {
-                TTrade.Logger.LogException("Error in SendTradeRequest:");
-                TTrade.Logger.LogError(ex);
+                TTrade.Logger.Exception("Error in SendTradeRequest:");
+                TTrade.Logger.Error(ex);
             }
 
             return success;
@@ -126,8 +126,8 @@ namespace Tavstal.Trade.Utils.Managers
             }
             catch (Exception ex)
             {
-                TTrade.Logger.LogException("Error in AcceptTradeRequest:");
-                TTrade.Logger.LogError(ex);
+                TTrade.Logger.Exception("Error in AcceptTradeRequest:");
+                TTrade.Logger.Error(ex);
             }
             
             return success;
@@ -181,8 +181,8 @@ namespace Tavstal.Trade.Utils.Managers
             }
             catch (Exception ex)
             {
-                TTrade.Logger.LogException("Error in DenyTradeRequest:");
-                TTrade.Logger.LogError(ex);
+                TTrade.Logger.Exception("Error in DenyTradeRequest:");
+                TTrade.Logger.Error(ex);
             }
             
             return success;
@@ -236,8 +236,8 @@ namespace Tavstal.Trade.Utils.Managers
             }
             catch (Exception ex)
             {
-                TTrade.Logger.LogException("Error in CancelTrade:");
-                TTrade.Logger.LogError(ex);
+                TTrade.Logger.Exception("Error in CancelTrade:");
+                TTrade.Logger.Error(ex);
             }
             
             return success;
@@ -278,8 +278,8 @@ namespace Tavstal.Trade.Utils.Managers
             }
             catch (Exception ex)
             {
-                TTrade.Logger.LogException("Error in ApproveTrade:");
-                TTrade.Logger.LogError(ex);
+                TTrade.Logger.Exception("Error in ApproveTrade:");
+                TTrade.Logger.Error(ex);
             }
             
             return success;
@@ -341,8 +341,8 @@ namespace Tavstal.Trade.Utils.Managers
             }
             catch (Exception ex)
             {
-                TTrade.Logger.LogException("Error in FinishTrade:");
-                TTrade.Logger.LogError(ex);
+                TTrade.Logger.Exception("Error in FinishTrade:");
+                TTrade.Logger.Error(ex);
             }
             
             return success;
