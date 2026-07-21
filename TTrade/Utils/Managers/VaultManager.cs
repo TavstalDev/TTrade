@@ -2,11 +2,11 @@ using System;
 using System.Collections.Generic;
 using Rocket.Unturned.Player;
 using SDG.Unturned;
-using Tavstal.Trade.Components;
-using Tavstal.Trade.Models;
+using Tavstal.TTrade.Components;
+using Tavstal.TTrade.Models;
 using UnityEngine;
 
-namespace Tavstal.Trade.Utils.Managers
+namespace Tavstal.TTrade.Utils.Managers
 {
     /// <summary>
     /// Manages the vault system for storing and retrieving player-specific data.
@@ -28,9 +28,9 @@ namespace Tavstal.Trade.Utils.Managers
         /// </summary>
         /// <param name="player">The <see cref="UnturnedPlayer"/> for whom the vault will be created.</param>
         /// <returns>A <see cref="VaultStorage"/> instance representing the created vault.</returns>
-        private static VaultStorage AddVault(UnturnedPlayer player)
+        private static VaultStorage? AddVault(UnturnedPlayer player)
         {
-            ItemBarricadeAsset barricadeAsset = Assets.find(EAssetType.ITEM, 328) as ItemBarricadeAsset;
+            ItemBarricadeAsset? barricadeAsset = Assets.find(EAssetType.ITEM, 328) as ItemBarricadeAsset;
             Transform transform = BarricadeManager.dropBarricade(new Barricade(barricadeAsset), null, new Vector3(player.Position.x, -100, player.Position.z), 0, 0, 0, ulong.Parse(player.Id), 29832);
             BarricadeDrop drop = BarricadeManager.FindBarricadeByRootTransform(transform);
             if (drop == null)
@@ -59,7 +59,7 @@ namespace Tavstal.Trade.Utils.Managers
         /// </param>
         public static void OpenVault(UnturnedPlayer player, Guid guid, bool edit)
         {
-            if (!_vaultList.TryGetValue(guid, out VaultStorage vaultStorage))
+            if (!_vaultList.TryGetValue(guid, out VaultStorage? vaultStorage))
                 vaultStorage = AddVault(player);
             
             InteractableStorage interactableStorage = (InteractableStorage)vaultStorage.StorageDrop.interactable;

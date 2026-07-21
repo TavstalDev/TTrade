@@ -1,15 +1,15 @@
-using Newtonsoft.Json;
 using SDG.Unturned;
+using YamlDotNet.Serialization;
 
-namespace Tavstal.Trade.Models
+namespace Tavstal.TTrade.Models
 {
     public class VaultStorage
     {
-        [JsonProperty("storageDrop")] 
+        [YamlMember(Order = 0)] 
         public BarricadeDrop StorageDrop;
-        [JsonProperty("sizeX")]
+        [YamlMember(Order = 1)]
         public int SizeX;
-        [JsonProperty("sizeY")]
+        [YamlMember(Order = 2)]
         public int SizeY;
 
         public VaultStorage()

@@ -1,12 +1,13 @@
 using System;
 using Rocket.Unturned.Player;
 using Steamworks;
+using Tavstal.TLibrary.Extensions;
 using Tavstal.TLibrary.Helpers.Unturned;
-using Tavstal.Trade.Components;
-using Tavstal.Trade.Models;
+using Tavstal.TTrade.Components;
+using Tavstal.TTrade.Models;
 using UnityEngine;
 
-namespace Tavstal.Trade.Utils.Managers
+namespace Tavstal.TTrade.Utils.Managers
 {
     /// <summary>
     /// Provides functionality for managing trade interactions between players.
@@ -29,46 +30,45 @@ namespace Tavstal.Trade.Utils.Managers
                 float distance = Vector3.Distance(tradeStarter.Position, tradeReceiver.Position);
                 if (distance > TTrade.Instance.Config.Distance)
                 {
-                    TTrade.Instance.SendCommandReply(tradeStarter, "error_trade_distance", distance, TTrade.Instance.Config.Distance);
+                    TTrade.Instance.SendCommandReply(tradeStarter, "error_trade_distance", TTrade.Instance.Config.General.MessageIcon, distance, TTrade.Instance.Config.Distance);
                     return false;
                 }
 
                 if (tradeStarter.Id == tradeReceiver.Id)
                 {
-                    TTrade.Instance.SendCommandReply(tradeStarter, "error_self_trade");
+                    TTrade.Instance.SendCommandReply(tradeStarter, "error_self_trade", TTrade.Instance.Config.General.MessageIcon);
                     return false;
                 }
 
                 TradeComponent starterComp = tradeStarter.GetComponent<TradeComponent>();
                 TradeComponent receiverComp = tradeReceiver.GetComponent<TradeComponent>();
-                if (starterComp.State != ETradeState.None)
+                if (starterComp.State != ETradeState.NONE)
                 {
-                    TTrade.Instance.SendCommandReply(tradeStarter, "error_already_trading");
+                    TTrade.Instance.SendCommandReply(tradeStarter, "error_already_trading", TTrade.Instance.Config.General.MessageIcon);
                     return false;
                 }
 
-                if (receiverComp.State != ETradeState.None)
+                if (receiverComp.State != ETradeState.NONE)
                 {
-                    TTrade.Instance.SendCommandReply(tradeStarter, "error_trade_target_busy", tradeReceiver.CharacterName);
+                    TTrade.Instance.SendCommandReply(tradeStarter, "error_trade_target_busy", TTrade.Instance.Config.General.MessageIcon, tradeReceiver.CharacterName);
                     return false;
                 }
 
                 if (receiverComp.TradeRequests.Contains(tradeStarter.CSteamID.m_SteamID))
                 {
-                    TTrade.Instance.SendCommandReply(tradeStarter, "error_trade_request_already_sent", tradeReceiver.CharacterName);
+                    TTrade.Instance.SendCommandReply(tradeStarter, "error_trade_request_already_sent", TTrade.Instance.Config.General.MessageIcon, tradeReceiver.CharacterName);
                     return false;
                 }
                 
                 receiverComp.TradeRequests.Add(tradeStarter.CSteamID.m_SteamID);
                 success = true;
 
-                TTrade.Instance.SendCommandReply(tradeStarter, "success_trade_request_sent", tradeReceiver.CharacterName);
-                TTrade.Instance.SendCommandReply(tradeReceiver, "success_trade_request_received", tradeStarter.CharacterName);
+                TTrade.Instance.SendCommandReply(tradeStarter, "success_trade_request_sent", TTrade.Instance.Config.General.MessageIcon, tradeReceiver.CharacterName);
+                TTrade.Instance.SendCommandReply(tradeReceiver, "success_trade_request_received", TTrade.Instance.Config.General.MessageIcon, tradeStarter.CharacterName);
             }
             catch (Exception ex)
             {
-                TTrade.Logger.Exception("Error in SendTradeRequest:");
-                TTrade.Logger.Error(ex);
+                TTrade.Logger.Error("Error in SendTradeRequest:", ex);
             }
 
             return success;
@@ -91,7 +91,7 @@ namespace Tavstal.Trade.Utils.Managers
                 float distance = Vector3.Distance(tradeSender.Position, tradeReceiver.Position);
                 if (distance > TTrade.Instance.Config.Distance)
                 {
-                    TTrade.Instance.SendCommandReply(tradeReceiver, "error_trade_distance", distance, TTrade.Instance.Config.Distance);
+                    TTrade.Instance.SendCommandReply(tradeReceiver, "error_trade_distance", TTrade.Instance.Config.General.MessageIcon, distance, TTrade.Instance.Config.Distance);
                     return false;
                 }
                 
@@ -99,35 +99,34 @@ namespace Tavstal.Trade.Utils.Managers
                 TradeComponent receiverComp = tradeReceiver.GetComponent<TradeComponent>();
                 if (!receiverComp.TradeRequests.Contains(tradeSender.CSteamID.m_SteamID))
                 {
-                    TTrade.Instance.SendCommandReply(tradeReceiver, "error_trade_request_not_sent", tradeSender.CharacterName);
+                    TTrade.Instance.SendCommandReply(tradeReceiver, "error_trade_request_not_sent", TTrade.Instance.Config.General.MessageIcon, tradeSender.CharacterName);
                     return false;
                 }
                 
-                if (senderComp.State != ETradeState.None)
+                if (senderComp.State != ETradeState.NONE)
                 {
-                    TTrade.Instance.SendCommandReply(tradeReceiver, "error_trade_target_busy", tradeSender.CharacterName);
+                    TTrade.Instance.SendCommandReply(tradeReceiver, "error_trade_target_busy", TTrade.Instance.Config.General.MessageIcon, tradeSender.CharacterName);
                     return false;
                 }
                 
-                if (receiverComp.State != ETradeState.None)
+                if (receiverComp.State != ETradeState.NONE)
                 {
-                    TTrade.Instance.SendCommandReply(tradeReceiver, "error_already_trading");
+                    TTrade.Instance.SendCommandReply(tradeReceiver, "error_already_trading", TTrade.Instance.Config.General.MessageIcon);
                     return false;
                 }
                 
                 receiverComp.TradePartner = tradeSender.CSteamID.m_SteamID;
-                receiverComp.State = ETradeState.Active;
+                receiverComp.State = ETradeState.ACTIVE;
                 senderComp.TradePartner = tradeReceiver.CSteamID.m_SteamID;
-                senderComp.State = ETradeState.Active;
+                senderComp.State = ETradeState.ACTIVE;
                 receiverComp.TradeRequests.Remove(tradeSender.CSteamID.m_SteamID);
-                TTrade.Instance.SendCommandReply(tradeReceiver, "success_trade_accept", tradeSender.CharacterName);
-                TTrade.Instance.SendCommandReply(tradeSender, "success_trade_accept_send", tradeReceiver.CharacterName);
+                TTrade.Instance.SendCommandReply(tradeReceiver, "success_trade_accept", TTrade.Instance.Config.General.MessageIcon, tradeSender.CharacterName);
+                TTrade.Instance.SendCommandReply(tradeSender, "success_trade_accept_send", TTrade.Instance.Config.General.MessageIcon, tradeReceiver.CharacterName);
                 success = true;
             }
             catch (Exception ex)
             {
-                TTrade.Logger.Exception("Error in AcceptTradeRequest:");
-                TTrade.Logger.Error(ex);
+                TTrade.Logger.Error("Error in AcceptTradeRequest:", ex);
             }
             
             return success;
@@ -150,7 +149,7 @@ namespace Tavstal.Trade.Utils.Managers
                 float distance = Vector3.Distance(tradeSender.Position, tradeReceiver.Position);
                 if (distance > TTrade.Instance.Config.Distance)
                 {
-                    TTrade.Instance.SendCommandReply(tradeReceiver, "error_trade_distance", distance, TTrade.Instance.Config.Distance);
+                    TTrade.Instance.SendCommandReply(tradeReceiver, "error_trade_distance", TTrade.Instance.Config.General.MessageIcon, distance, TTrade.Instance.Config.Distance);
                     return false;
                 }
                 
@@ -158,31 +157,30 @@ namespace Tavstal.Trade.Utils.Managers
                 TradeComponent receiverComp = tradeReceiver.GetComponent<TradeComponent>();
                 if (!receiverComp.TradeRequests.Contains(tradeSender.CSteamID.m_SteamID))
                 {
-                    TTrade.Instance.SendCommandReply(tradeReceiver, "error_trade_request_not_sent", tradeSender.CharacterName);
+                    TTrade.Instance.SendCommandReply(tradeReceiver, "error_trade_request_not_sent", TTrade.Instance.Config.General.MessageIcon, tradeSender.CharacterName);
                     return false;
                 }
                 
-                if (senderComp.State != ETradeState.None)
+                if (senderComp.State != ETradeState.NONE)
                 {
-                    TTrade.Instance.SendCommandReply(tradeReceiver, "error_trade_target_busy", tradeSender.CharacterName);
+                    TTrade.Instance.SendCommandReply(tradeReceiver, "error_trade_target_busy", TTrade.Instance.Config.General.MessageIcon, tradeSender.CharacterName);
                     return false;
                 }
                 
-                if (receiverComp.State != ETradeState.None)
+                if (receiverComp.State != ETradeState.NONE)
                 {
-                    TTrade.Instance.SendCommandReply(tradeReceiver, "error_already_trading");
+                    TTrade.Instance.SendCommandReply(tradeReceiver, "error_already_trading", TTrade.Instance.Config.General.MessageIcon);
                     return false;
                 }
                 
                 receiverComp.TradeRequests.Remove(tradeSender.CSteamID.m_SteamID);
-                TTrade.Instance.SendCommandReply(tradeReceiver, "success_trade_deny", tradeSender.CharacterName);
-                TTrade.Instance.SendCommandReply(tradeSender, "success_trade_deny_send", tradeReceiver.CharacterName);
+                TTrade.Instance.SendCommandReply(tradeReceiver, "success_trade_deny", TTrade.Instance.Config.General.MessageIcon, tradeSender.CharacterName);
+                TTrade.Instance.SendCommandReply(tradeSender, "success_trade_deny_send", TTrade.Instance.Config.General.MessageIcon, tradeReceiver.CharacterName);
                 success = true;
             }
             catch (Exception ex)
             {
-                TTrade.Logger.Exception("Error in DenyTradeRequest:");
-                TTrade.Logger.Error(ex);
+                TTrade.Logger.Error("Error in DenyTradeRequest:", ex);
             }
             
             return success;
@@ -202,25 +200,25 @@ namespace Tavstal.Trade.Utils.Managers
             try
             {
                 TradeComponent callerComp = player.GetComponent<TradeComponent>();
-                if (callerComp.State == ETradeState.None)
+                if (callerComp.State == ETradeState.NONE)
                 {
-                    TTrade.Instance.SendCommandReply(player, "error_not_in_trade");
+                    TTrade.Instance.SendCommandReply(player, "error_not_in_trade", TTrade.Instance.Config.General.MessageIcon);
                     return false;
                 }
                 
                 UnturnedPlayer partnerPlayer = UnturnedPlayer.FromCSteamID((CSteamID)callerComp.TradePartner);
                 if (partnerPlayer == null)
                 {
-                    TTrade.Instance.SendCommandReply(player, "error_trade_partner_not_found");
+                    TTrade.Instance.SendCommandReply(player, "error_trade_partner_not_found", TTrade.Instance.Config.General.MessageIcon);
                     return false;
                 }
                 
                 TradeComponent partnerComp = partnerPlayer.GetComponent<TradeComponent>();
 
-                callerComp.State = ETradeState.None;
+                callerComp.State = ETradeState.NONE;
                 callerComp.TradePartner = 0;
                 player.Inventory.closeStorage();
-                partnerComp.State = ETradeState.None;
+                partnerComp.State = ETradeState.NONE;
                 partnerComp.TradePartner = 0;
                 partnerPlayer.Inventory.closeStorage();
                 
@@ -230,14 +228,13 @@ namespace Tavstal.Trade.Utils.Managers
                 partnerComp.VaultId = Guid.Empty;
                 callerComp.VaultId = Guid.Empty;
                 
-                TTrade.Instance.SendCommandReply(player, "success_trade_cancel");
-                TTrade.Instance.SendCommandReply(partnerPlayer, "success_trade_cancel_send", player.CharacterName);
+                TTrade.Instance.SendCommandReply(player, "success_trade_cancel", TTrade.Instance.Config.General.MessageIcon);
+                TTrade.Instance.SendCommandReply(partnerPlayer, "success_trade_cancel_send", TTrade.Instance.Config.General.MessageIcon, player.CharacterName);
                 success = true;
             }
             catch (Exception ex)
             {
-                TTrade.Logger.Exception("Error in CancelTrade:");
-                TTrade.Logger.Error(ex);
+                TTrade.Logger.Error("Error in CancelTrade:", ex);
             }
             
             return success;
@@ -257,29 +254,28 @@ namespace Tavstal.Trade.Utils.Managers
             try
             {
                 TradeComponent callerComp = player.GetComponent<TradeComponent>();
-                if (callerComp.State != ETradeState.Active)
+                if (callerComp.State != ETradeState.ACTIVE)
                 {
-                    TTrade.Instance.SendCommandReply(player, "error_not_in_trade");
+                    TTrade.Instance.SendCommandReply(player, "error_not_in_trade", TTrade.Instance.Config.General.MessageIcon);
                     return false;
                 }
                 
                 UnturnedPlayer partnerPlayer = UnturnedPlayer.FromCSteamID((CSteamID)callerComp.TradePartner);
                 if (partnerPlayer == null)
                 {
-                    TTrade.Instance.SendCommandReply(player, "error_trade_partner_not_found");
+                    TTrade.Instance.SendCommandReply(player, "error_trade_partner_not_found", TTrade.Instance.Config.General.MessageIcon);
                     return false;
                 }
                 
-                callerComp.State = ETradeState.Approved;
+                callerComp.State = ETradeState.APPROVED;
                 
-                TTrade.Instance.SendCommandReply(player, "success_trade_approve");
-                TTrade.Instance.SendCommandReply(partnerPlayer, "success_trade_approve_send", player.CharacterName);
+                TTrade.Instance.SendCommandReply(player, "success_trade_approve", TTrade.Instance.Config.General.MessageIcon);
+                TTrade.Instance.SendCommandReply(partnerPlayer, "success_trade_approve_send", TTrade.Instance.Config.General.MessageIcon, player.CharacterName);
                 success = true;
             }
             catch (Exception ex)
             {
-                TTrade.Logger.Exception("Error in ApproveTrade:");
-                TTrade.Logger.Error(ex);
+                TTrade.Logger.Error("Error in ApproveTrade:", ex);
             }
             
             return success;
@@ -299,21 +295,21 @@ namespace Tavstal.Trade.Utils.Managers
             try
             {
                 TradeComponent callerComp = player.GetComponent<TradeComponent>();
-                if (callerComp.State != ETradeState.Approved)
+                if (callerComp.State != ETradeState.APPROVED)
                 {
-                    TTrade.Instance.SendCommandReply(player, "error_trade_not_approved");
+                    TTrade.Instance.SendCommandReply(player, "error_trade_not_approved", TTrade.Instance.Config.General.MessageIcon);
                     return false;
                 }
                 
                 UnturnedPlayer partnerPlayer = UnturnedPlayer.FromCSteamID((CSteamID)callerComp.TradePartner);
                 if (partnerPlayer == null)
                 {
-                    TTrade.Instance.SendCommandReply(player, "error_trade_partner_not_found");
+                    TTrade.Instance.SendCommandReply(player, "error_trade_partner_not_found", TTrade.Instance.Config.General.MessageIcon);
                     return false;
                 }
                 TradeComponent partnerComp = partnerPlayer.GetComponent<TradeComponent>();
                 
-                if (partnerComp.State == ETradeState.Finished)
+                if (partnerComp.State == ETradeState.FINISHED)
                 {
                     VaultManager.RemoveVault(player, partnerComp.VaultId, true);
                     VaultManager.RemoveVault(partnerPlayer, callerComp.VaultId, true);
@@ -321,28 +317,27 @@ namespace Tavstal.Trade.Utils.Managers
                     partnerComp.VaultId = Guid.Empty;
                     callerComp.VaultId = Guid.Empty;
                     
-                    TTrade.Instance.SendCommandReply(player, "success_trade_complete");
-                    TTrade.Instance.SendCommandReply(partnerPlayer, "success_trade_complete");
+                    TTrade.Instance.SendCommandReply(player, "success_trade_complete", TTrade.Instance.Config.General.MessageIcon);
+                    TTrade.Instance.SendCommandReply(partnerPlayer, "success_trade_complete", TTrade.Instance.Config.General.MessageIcon);
                     
-                    callerComp.State = ETradeState.None;
+                    callerComp.State = ETradeState.NONE;
                     callerComp.TradePartner = 0;
                     player.Inventory.closeStorage();
-                    partnerComp.State = ETradeState.None;
+                    partnerComp.State = ETradeState.NONE;
                     partnerComp.TradePartner = 0;
                     partnerPlayer.Inventory.closeStorage();
                 }
                 else
                 {
-                    callerComp.State = ETradeState.Finished;
-                    TTrade.Instance.SendCommandReply(player, "success_trade_finish");
-                    TTrade.Instance.SendCommandReply(partnerPlayer, "success_trade_finish_send", player.CharacterName);
+                    callerComp.State = ETradeState.FINISHED;
+                    TTrade.Instance.SendCommandReply(player, "success_trade_finish", TTrade.Instance.Config.General.MessageIcon);
+                    TTrade.Instance.SendCommandReply(partnerPlayer, "success_trade_finish_send", TTrade.Instance.Config.General.MessageIcon, player.CharacterName);
                 }
                 success = true;
             }
             catch (Exception ex)
             {
-                TTrade.Logger.Exception("Error in FinishTrade:");
-                TTrade.Logger.Error(ex);
+                TTrade.Logger.Error("Error in FinishTrade:", ex);
             }
             
             return success;

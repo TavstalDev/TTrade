@@ -1,11 +1,11 @@
 ﻿using System.Collections.Generic;
 using Rocket.Unturned;
 using Rocket.Unturned.Player;
-using Tavstal.Trade.Components;
-using Tavstal.Trade.Models;
-using Tavstal.Trade.Utils.Managers;
+using Tavstal.TTrade.Components;
+using Tavstal.TTrade.Models;
+using Tavstal.TTrade.Utils.Managers;
 
-namespace Tavstal.Trade.Utils.Handlers
+namespace Tavstal.TTrade.Utils.Handlers
 {
     public static class PlayerEventHandler
     {
@@ -45,7 +45,7 @@ namespace Tavstal.Trade.Utils.Handlers
         {
             _players.Remove(player);
            TradeComponent component = player.GetComponent<TradeComponent>();
-           if (component.State == ETradeState.None)
+           if (component.State == ETradeState.NONE)
                return;
 
            TradeManager.CancelTrade(player);

@@ -1,9 +1,9 @@
-﻿using Rocket.API;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Reflection;
+using Rocket.API;
 using Tavstal.TLibrary.Helpers.Unturned;
 
-namespace Tavstal.Trade.Commands
+namespace Tavstal.TTrade.Commands
 {
     public class CommandVersion : IRocketCommand
     {
@@ -17,17 +17,16 @@ namespace Tavstal.Trade.Commands
 
         public void Execute(IRocketPlayer caller, string[] command)
         {
-            // Please do not remove this region and its code, because the license require credits to the author.
-            #region Credits to Tavstal
-            TTrade.Instance.SendPlainCommandReply(caller, "#########################################");
-            TTrade.Instance.SendPlainCommandReply(caller, $"# This plugin uses TLibrary.");
-            TTrade.Instance.SendPlainCommandReply(caller, $"# TLibrary Created By: Tavstal");
-            TTrade.Instance.SendPlainCommandReply(caller, $"# Github: https://github.com/TavstalDev/TLibrary/tree/master");
-            #endregion
-            TTrade.Instance.SendPlainCommandReply(caller, "#########################################");
-            TTrade.Instance.SendPlainCommandReply(caller, $"# Build Version: {TTrade.Version}");
-            TTrade.Instance.SendPlainCommandReply(caller, $"# Build Date: {TTrade.BuildDate}");
-            TTrade.Instance.SendPlainCommandReply(caller, "#########################################");
+            var instance = TTrade.Instance;
+            var config = instance.Config.General;
+            var icon = config.MessageIcon;
+            string message = string.Join(System.Environment.NewLine, 
+                $"&b&l[{instance.GetPluginName()}]&r System Info:",
+                $"&b • Version: &r{TTrade.Version}",
+                $"&b • Build Date: &r{TTrade.BuildDate}",
+                "&b • Developer: &rTavstal");
+            
+            instance.SendPlainCommandReply(caller, message, icon);
         }
     }
 }

@@ -1,24 +1,26 @@
-﻿using Newtonsoft.Json;
-using Tavstal.TLibrary.Models.Plugin;
+﻿using Tavstal.TLibrary.Models.Config;
+using YamlDotNet.Serialization;
+// ReSharper disable ClassNeverInstantiated.Global
 
-namespace Tavstal.Trade
+namespace Tavstal.TTrade
 {
-    public class TradeConfig : ConfigurationBase
+    public class TradeConfig : YamlConfiguration
     {
-        [JsonProperty(Order = 3)]
+        [YamlMember(Order = 3)]
         public int Distance{ get; set; }
-        [JsonProperty(Order = 4)]
+        [YamlMember(Order = 4)]
         public int TradeRowX{ get; set; }
-        [JsonProperty(Order = 5)]
+        [YamlMember(Order = 5)]
         public int TradeRowY{ get; set; }
-        [JsonProperty(Order = 6)]
+        [YamlMember(Order = 6)]
         public double Cooldown{ get; set; }
 
         public override void LoadDefaults()
         {
-            DebugMode = false;
-            Locale = "en";
-            DownloadLocalePacks = true;
+            General = new GeneralConfig
+            {
+                MessageIcon = ""
+            };
             Distance = 3;
             TradeRowX = 6;
             TradeRowY = 6;

@@ -1,12 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Text;
+using Tavstal.TLibrary.Extensions;
+using Tavstal.TLibrary.Models.Logging;
 using Tavstal.TLibrary.Models.Plugin;
-using Tavstal.Trade.Components;
-using Tavstal.Trade.Models;
-using Tavstal.Trade.Utils.Handlers;
-using Tavstal.Trade.Utils.Managers;
+using Tavstal.TTrade.Components;
+using Tavstal.TTrade.Models;
+using Tavstal.TTrade.Utils.Handlers;
+using Tavstal.TTrade.Utils.Managers;
 
-namespace Tavstal.Trade
+namespace Tavstal.TTrade
 {
     /// <summary>
     /// The main plugin class.
@@ -14,40 +17,47 @@ namespace Tavstal.Trade
     // ReSharper disable once InconsistentNaming
     public class TTrade : PluginBase<TradeConfig>
     {
-        public static TTrade Instance { get; private set; }
+        public static TTrade Instance { get; private set; } = null!;
 
+        public override void OnPreLoad()
+        {
+            Instance = this;
+            StringBuilder sb = new StringBuilder();
+            sb.AppendLine("────────────────────────────────────────────────────────");
+            sb.AppendLine();
+            sb.AppendLine("████████╗████████╗██████╗  █████╗ ██████╗ ███████╗");
+            sb.AppendLine("╚══██╔══╝╚══██╔══╝██╔══██╗██╔══██╗██╔══██╗██╔════╝");
+            sb.AppendLine("   ██║      ██║   ██████╔╝███████║██║  ██║█████╗  ");
+            sb.AppendLine("   ██║      ██║   ██╔══██╗██╔══██║██║  ██║██╔══╝  ");
+            sb.AppendLine("   ██║      ██║   ██║  ██║██║  ██║██████╔╝███████╗");
+            sb.AppendLine("   ╚═╝      ╚═╝   ╚═╝  ╚═╝╚═╝  ╚═╝╚═════╝ ╚══════╝");
+            sb.AppendLine();
+            sb.AppendLine("[ About ]");
+            sb.AppendLine(" ▸ Developer : Tavstal");
+            sb.AppendLine(" ▸ Discord   : @Tavstal");
+            sb.AppendLine(" ▸ Website   : https://redstoneplugins.com");
+            sb.AppendLine(" ▸ GitHub    : https://github.com/TavstalDev");
+            sb.AppendLine();
+            sb.AppendLine("[ Build ]");
+            sb.AppendLine($" ▸ Version   : {Version}");
+            sb.AppendLine($" ▸ Build Date: {BuildDate} UTC");
+            sb.AppendLine($" ▸ TLibrary  : {LibraryVersion}");
+            sb.AppendLine();
+            sb.AppendLine("[ Support ]");
+            sb.AppendLine(" ▸ Report issues or request features:");
+            sb.AppendLine(" ▸ https://github.com/TavstalDev/TShop2/issues");
+            sb.AppendLine();
+            sb.AppendLine("────────────────────────────────────────────────────────");
+            Logger.Log(ELogLevel.COMMAND, sb.ToString(), includePrefixes: false, color:  ConsoleColor.Cyan);
+        }
+        
         /// <summary>
         /// Fired when the plugin is loaded.
         /// </summary>
         public override void OnLoad()
         {
-            Instance = this;
-            // Attach player related events
             PlayerEventHandler.AttachEvents();
-
-            Logger.Log("████████╗████████╗██████╗  █████╗ ██████╗ ███████╗", ConsoleColor.Cyan, prefix: null);
-            Logger.Log("╚══██╔══╝╚══██╔══╝██╔══██╗██╔══██╗██╔══██╗██╔════╝", ConsoleColor.Cyan, prefix: null);
-            Logger.Log("   ██║      ██║   ██████╔╝███████║██║  ██║█████╗  ", ConsoleColor.Cyan, prefix: null);
-            Logger.Log("   ██║      ██║   ██╔══██╗██╔══██║██║  ██║██╔══╝  ", ConsoleColor.Cyan, prefix: null);
-            Logger.Log("   ██║      ██║   ██║  ██║██║  ██║██████╔╝███████╗", ConsoleColor.Cyan, prefix: null);
-            Logger.Log("   ╚═╝      ╚═╝   ╚═╝  ╚═╝╚═╝  ╚═╝╚═════╝ ╚══════╝", ConsoleColor.Cyan, prefix: null);
-            Logger.Log("#########################################", prefix: null);
-            Logger.Log("#       Thanks for using this plugin!   #", prefix: null);
-            Logger.Log("#########################################", prefix: null);
-            Logger.Log("# Developed By: Tavstal", prefix: null);
-            Logger.Log("# Discord:      @Tavstal", prefix: null);
-            Logger.Log("# Website:      https://redstoneplugins.com", prefix: null);
-            Logger.Log("# My GitHub:    https://tavstaldev.github.io", prefix: null);
-            Logger.Log("#########################################", prefix: null);
-            Logger.Log($"# Plugin Version:    {Version}", prefix: null);
-            Logger.Log($"# Build Date:        {BuildDate}", prefix: null);
-            Logger.Log($"# TLibrary Version:  {LibraryVersion}", prefix: null);
-            Logger.Log("#########################################", prefix: null);
-            Logger.Log("# Found an issue or have a suggestion?", prefix: null);
-            Logger.Log("# Report it here: https://github.com/TavstalDev/TTrade/issues", prefix: null); 
-            Logger.Log("#########################################", prefix: null);
-
-            Logger.Log($"# {GetPluginName()} has been loaded.");
+            Logger.Info($"# {GetPluginName()} has been loaded.");
         }
 
         /// <summary>
@@ -56,12 +66,12 @@ namespace Tavstal.Trade
         public override void OnUnLoad()
         {
             PlayerEventHandler.DetachEvents();
-            Logger.Log($"# {GetPluginName()} has been successfully unloaded.");
+            Logger.Info($"# {GetPluginName()} has been successfully unloaded.");
 
             foreach (var player in PlayerEventHandler.Players)
             {
                 TradeComponent comp = player.GetComponent<TradeComponent>();
-                if (comp.State == ETradeState.None)
+                if (comp.State == ETradeState.NONE)
                     continue;
 
                 TradeManager.CancelTrade(player);
@@ -71,7 +81,7 @@ namespace Tavstal.Trade
         public override Dictionary<string, string> DefaultLocalization =>
            new Dictionary<string, string>
            {
-               { "prefix", $"&e[{GetPluginName()}]" },
+               { "prefix", $"&e[{GetPluginName()}] " },
                { "error_player_not_found", "&cPlayer was not found." },
                { "error_not_in_trade", "&cYou are not in a trade." },
                { "error_trade_partner_not_found", "&cFailed to get your trade partner." },

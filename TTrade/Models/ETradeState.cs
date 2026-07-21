@@ -1,10 +1,10 @@
-namespace Tavstal.Trade.Models
+namespace Tavstal.TTrade.Models
 {
     public enum ETradeState
     {
-        None = 0,
-        Active = 1,
-        Approved = 2,
-        Finished = 3,
+        NONE = 0,
+        ACTIVE = 1,
+        APPROVED = 2,
+        FINISHED = 3,
     }
 }
