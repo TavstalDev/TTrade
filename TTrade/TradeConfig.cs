@@ -19,7 +19,7 @@ namespace Tavstal.TTrade
         {
             General = new GeneralConfig
             {
-                MessageIcon = ""
+                MessageIcon = "https://raw.githubusercontent.com/TavstalDev/TTrade/refs/heads/master/assets/icon.png"
             };
             Distance = 3;
             TradeRowX = 6;
