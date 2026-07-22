@@ -45,7 +45,7 @@ namespace Tavstal.TTrade
             sb.AppendLine();
             sb.AppendLine("[ Support ]");
             sb.AppendLine(" ▸ Report issues or request features:");
-            sb.AppendLine(" ▸ https://github.com/TavstalDev/TShop2/issues");
+            sb.AppendLine(" ▸ https://github.com/TavstalDev/TTrade/issues");
             sb.AppendLine();
             sb.AppendLine("────────────────────────────────────────────────────────");
             Logger.Log(ELogLevel.COMMAND, sb.ToString(), includePrefixes: false, color:  ConsoleColor.Cyan);

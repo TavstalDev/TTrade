@@ -14,6 +14,7 @@ namespace Tavstal.TTrade.Models
 
         public VaultStorage()
         {
+            StorageDrop = null!;
         }
 
         public VaultStorage(BarricadeDrop drop, int sizeX, int sizeY)

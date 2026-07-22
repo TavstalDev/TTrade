@@ -62,6 +62,9 @@ namespace Tavstal.TTrade.Utils.Managers
             if (!_vaultList.TryGetValue(guid, out VaultStorage? vaultStorage))
                 vaultStorage = AddVault(player);
             
+            if (vaultStorage == null)
+                return;
+            
             InteractableStorage interactableStorage = (InteractableStorage)vaultStorage.StorageDrop.interactable;
             interactableStorage.items.resize((byte)vaultStorage.SizeX, (byte)vaultStorage.SizeY);
             interactableStorage.isOpen = true;
@@ -71,7 +74,7 @@ namespace Tavstal.TTrade.Utils.Managers
             player.Inventory.updateItems(PlayerInventory.STORAGE, interactableStorage.items);
             player.Inventory.sendStorage();
         }
-        
+
         /// <summary>
         /// Removes a vault associated with the specified <see cref="UnturnedPlayer"/>.
         /// </summary>
@@ -83,21 +86,22 @@ namespace Tavstal.TTrade.Utils.Managers
         /// </param>
         public static void RemoveVault(UnturnedPlayer player, Guid id, bool keepItems)
         {
-            if (_vaultList.TryGetValue(id, out VaultStorage vault))
-            {
-                BarricadeData barricadeData = vault.StorageDrop.GetServersideData();
-                InteractableStorage interactableStorage = (InteractableStorage)vault.StorageDrop.interactable;
+            if (!_vaultList.TryGetValue(id, out VaultStorage vault))
+                return;
+            
+            BarricadeData barricadeData = vault.StorageDrop.GetServersideData();
+            InteractableStorage interactableStorage = (InteractableStorage)vault.StorageDrop.interactable;
 
-                if (keepItems)
-                {
-                    foreach (var itemJar in interactableStorage.items.items)
-                        player.Inventory.forceAddItem(itemJar.item, false);
-                }
-                
-                interactableStorage.items.clear();
-                barricadeData.barricade.askDamage(ushort.MaxValue);
-                _vaultList.Remove(id);
+            if (keepItems)
+            {
+                foreach (var itemJar in interactableStorage.items.items)
+                    player.Inventory.forceAddItem(itemJar.item, false);
             }
+
+            interactableStorage.items.clear();
+            barricadeData.barricade.askDamage(ushort.MaxValue);
+            _vaultList.Remove(id);
+
         }
     }
 }
