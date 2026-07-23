@@ -43,12 +43,18 @@ namespace Tavstal.TTrade.Utils.Handlers
 
         private static void OnPlayerDisconnected(UnturnedPlayer player)
         {
-            _players.Remove(player);
-           TradeComponent component = player.GetComponent<TradeComponent>();
-           if (component.State == ETradeState.NONE)
-               return;
+            // ReSharper disable once ConditionIsAlwaysTrueOrFalseAccordingToNullableAPIContract
+            if (player == null)
+                return;
+            
+            var localPlayer = player;
+            if (_players.Contains(localPlayer))
+                _players.Remove(localPlayer);
+            TradeComponent component = localPlayer.GetComponent<TradeComponent>();
+            if (component == null || component.State == ETradeState.NONE)
+                return;
 
-           TradeManager.CancelTrade(player);
+            TradeManager.CancelTrade(localPlayer);
         }
     }
 }
