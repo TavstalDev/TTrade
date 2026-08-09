@@ -5,7 +5,7 @@ using Tavstal.TTrade.Components;
 using Tavstal.TTrade.Models;
 using Tavstal.TTrade.Utils.Managers;
 
-namespace Tavstal.TTrade.Utils.Handlers
+namespace Tavstal.TTrade.Handlers
 {
     public static class PlayerEventHandler
     {
@@ -50,11 +50,12 @@ namespace Tavstal.TTrade.Utils.Handlers
             var localPlayer = player;
             if (_players.Contains(localPlayer))
                 _players.Remove(localPlayer);
-            TradeComponent component = localPlayer.GetComponent<TradeComponent>();
+            TradeComponent? component = ComponentManager.Get(localPlayer);
             if (component == null || component.State == ETradeState.NONE)
                 return;
 
             TradeManager.CancelTrade(localPlayer);
+            ComponentManager.Invalidate(localPlayer.Id);
         }
     }
 }

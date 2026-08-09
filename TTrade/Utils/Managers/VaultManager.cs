@@ -36,7 +36,10 @@ namespace Tavstal.TTrade.Utils.Managers
             if (drop == null)
                 return null;
             
-            TradeComponent comp = player.GetComponent<TradeComponent>();
+            TradeComponent? comp = ComponentManager.Get(player);
+            if (comp == null)
+                return null;
+            
             comp.VaultId = Guid.NewGuid();
             VaultStorage storage = new VaultStorage
             {

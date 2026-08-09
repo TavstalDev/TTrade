@@ -79,7 +79,10 @@ namespace Tavstal.TTrade.Commands
                     }
 
                     UnturnedPlayer callerPlayer = (UnturnedPlayer)caller;
-                    TradeComponent comp = callerPlayer.GetComponent<TradeComponent>();
+                    TradeComponent? comp = ComponentManager.Get(callerPlayer);
+                    if (comp == null)
+                        return;
+                    
                     if (comp.State == ETradeState.NONE)
                     {
                         TTrade.Instance.SendCommandReply(callerPlayer, "error_not_in_trade", TTrade.Instance.Config.General.MessageIcon);
@@ -108,7 +111,9 @@ namespace Tavstal.TTrade.Commands
                     }
 
                     UnturnedPlayer callerPlayer = (UnturnedPlayer)caller;
-                    TradeComponent comp = callerPlayer.GetComponent<TradeComponent>();
+                    TradeComponent? comp = ComponentManager.Get(callerPlayer);
+                    if (comp == null)
+                        return;
                     
                     if (comp.State == ETradeState.NONE)
                     {
@@ -150,8 +155,10 @@ namespace Tavstal.TTrade.Commands
                     
 
                     UnturnedPlayer callerPlayer = (UnturnedPlayer)caller;
-                    TradeComponent comp = callerPlayer.GetComponent<TradeComponent>();
-
+                    TradeComponent? comp = ComponentManager.Get(callerPlayer);
+                    if (comp == null)
+                        return;
+                    
                     if (comp.State == ETradeState.NONE)
                     {
                         TTrade.Instance.SendCommandReply(callerPlayer, "error_not_in_trade", TTrade.Instance.Config.General.MessageIcon);
@@ -165,7 +172,10 @@ namespace Tavstal.TTrade.Commands
                         return;
                     }
 
-                    TradeComponent partnerComp = tradePartner.GetComponent<TradeComponent>();
+                    TradeComponent? partnerComp = ComponentManager.Get(tradePartner);
+                    if (partnerComp == null)
+                        return;
+                    
                     float distance = Vector3.Distance(callerPlayer.Position, tradePartner.Position);
                     if (distance > TTrade.Instance.Config.Distance)
                     {
@@ -185,7 +195,10 @@ namespace Tavstal.TTrade.Commands
                     }
 
                     UnturnedPlayer callerPlayer = (UnturnedPlayer)caller;
-                    TradeComponent comp = callerPlayer.GetComponent<TradeComponent>();
+                    TradeComponent? comp = ComponentManager.Get(callerPlayer);
+                    if (comp == null)
+                        return;
+                    
                     if (comp.State == ETradeState.NONE)
                     {
                         TTrade.Instance.SendCommandReply(callerPlayer, "error_not_in_trade", TTrade.Instance.Config.General.MessageIcon);

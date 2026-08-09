@@ -5,8 +5,8 @@ using Tavstal.TLibrary.Extensions;
 using Tavstal.TLibrary.Models.Logging;
 using Tavstal.TLibrary.Models.Plugin;
 using Tavstal.TTrade.Components;
+using Tavstal.TTrade.Handlers;
 using Tavstal.TTrade.Models;
-using Tavstal.TTrade.Utils.Handlers;
 using Tavstal.TTrade.Utils.Managers;
 
 namespace Tavstal.TTrade
@@ -70,7 +70,10 @@ namespace Tavstal.TTrade
 
             foreach (var player in PlayerEventHandler.Players)
             {
-                TradeComponent comp = player.GetComponent<TradeComponent>();
+                TradeComponent? comp = ComponentManager.Get(player);
+                if (comp == null)
+                    continue;
+                
                 if (comp.State == ETradeState.NONE)
                     continue;
 

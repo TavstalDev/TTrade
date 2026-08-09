@@ -40,8 +40,11 @@ namespace Tavstal.TTrade.Utils.Managers
                     return false;
                 }
 
-                TradeComponent starterComp = tradeStarter.GetComponent<TradeComponent>();
-                TradeComponent receiverComp = tradeReceiver.GetComponent<TradeComponent>();
+                TradeComponent? starterComp = ComponentManager.Get(tradeStarter);
+                TradeComponent? receiverComp = ComponentManager.Get(tradeReceiver);
+                if (starterComp == null || receiverComp == null)
+                    return false;
+                
                 if (starterComp.State != ETradeState.NONE)
                 {
                     TTrade.Instance.SendCommandReply(tradeStarter, "error_already_trading", TTrade.Instance.Config.General.MessageIcon);
@@ -95,8 +98,11 @@ namespace Tavstal.TTrade.Utils.Managers
                     return false;
                 }
                 
-                TradeComponent senderComp = tradeSender.GetComponent<TradeComponent>();
-                TradeComponent receiverComp = tradeReceiver.GetComponent<TradeComponent>();
+                TradeComponent? senderComp = ComponentManager.Get(tradeSender);
+                TradeComponent? receiverComp = ComponentManager.Get(tradeReceiver);
+                if (senderComp == null || receiverComp == null)
+                    return false;
+                
                 if (!receiverComp.TradeRequests.Contains(tradeSender.CSteamID.m_SteamID))
                 {
                     TTrade.Instance.SendCommandReply(tradeReceiver, "error_trade_request_not_sent", TTrade.Instance.Config.General.MessageIcon, tradeSender.CharacterName);
@@ -153,8 +159,11 @@ namespace Tavstal.TTrade.Utils.Managers
                     return false;
                 }
                 
-                TradeComponent senderComp = tradeSender.GetComponent<TradeComponent>();
-                TradeComponent receiverComp = tradeReceiver.GetComponent<TradeComponent>();
+                TradeComponent? senderComp = ComponentManager.Get(tradeSender);
+                TradeComponent? receiverComp = ComponentManager.Get(tradeReceiver);
+                if (senderComp == null || receiverComp == null)
+                    return false;
+                
                 if (!receiverComp.TradeRequests.Contains(tradeSender.CSteamID.m_SteamID))
                 {
                     TTrade.Instance.SendCommandReply(tradeReceiver, "error_trade_request_not_sent", TTrade.Instance.Config.General.MessageIcon, tradeSender.CharacterName);
@@ -199,7 +208,10 @@ namespace Tavstal.TTrade.Utils.Managers
 
             try
             {
-                TradeComponent callerComp = player.GetComponent<TradeComponent>();
+                TradeComponent? callerComp = ComponentManager.Get(player);
+                if (callerComp == null)
+                    return false;
+                
                 if (callerComp.State == ETradeState.NONE)
                 {
                     TTrade.Instance.SendCommandReply(player, "error_not_in_trade", TTrade.Instance.Config.General.MessageIcon);
@@ -213,20 +225,23 @@ namespace Tavstal.TTrade.Utils.Managers
                     return false;
                 }
                 
-                TradeComponent partnerComp = partnerPlayer.GetComponent<TradeComponent>();
+                TradeComponent? partnerComp = ComponentManager.Get(partnerPlayer);
 
                 callerComp.State = ETradeState.NONE;
                 callerComp.TradePartner = 0;
                 player.Inventory.closeStorage();
-                partnerComp.State = ETradeState.NONE;
-                partnerComp.TradePartner = 0;
-                partnerPlayer.Inventory.closeStorage();
-                
-                VaultManager.RemoveVault(partnerPlayer, partnerComp.VaultId, true);
                 VaultManager.RemoveVault(player, callerComp.VaultId, true);
-
-                partnerComp.VaultId = Guid.Empty;
                 callerComp.VaultId = Guid.Empty;
+                
+                if (partnerComp != null)
+                {
+                    partnerComp.State = ETradeState.NONE;
+                    VaultManager.RemoveVault(partnerPlayer, partnerComp.VaultId, true);
+                    partnerComp.TradePartner = 0;
+                    partnerComp.VaultId = Guid.Empty;
+                }
+
+                partnerPlayer.Inventory.closeStorage();
                 
                 TTrade.Instance.SendCommandReply(player, "success_trade_cancel", TTrade.Instance.Config.General.MessageIcon);
                 TTrade.Instance.SendCommandReply(partnerPlayer, "success_trade_cancel_send", TTrade.Instance.Config.General.MessageIcon, player.CharacterName);
@@ -253,7 +268,10 @@ namespace Tavstal.TTrade.Utils.Managers
 
             try
             {
-                TradeComponent callerComp = player.GetComponent<TradeComponent>();
+                TradeComponent? callerComp = ComponentManager.Get(player);
+                if (callerComp == null)
+                    return false;
+                
                 if (callerComp.State != ETradeState.ACTIVE)
                 {
                     TTrade.Instance.SendCommandReply(player, "error_not_in_trade", TTrade.Instance.Config.General.MessageIcon);
@@ -294,7 +312,10 @@ namespace Tavstal.TTrade.Utils.Managers
 
             try
             {
-                TradeComponent callerComp = player.GetComponent<TradeComponent>();
+                TradeComponent? callerComp = ComponentManager.Get(player);
+                if (callerComp == null)
+                    return false;
+                
                 if (callerComp.State != ETradeState.APPROVED)
                 {
                     TTrade.Instance.SendCommandReply(player, "error_trade_not_approved", TTrade.Instance.Config.General.MessageIcon);
@@ -307,7 +328,9 @@ namespace Tavstal.TTrade.Utils.Managers
                     TTrade.Instance.SendCommandReply(player, "error_trade_partner_not_found", TTrade.Instance.Config.General.MessageIcon);
                     return false;
                 }
-                TradeComponent partnerComp = partnerPlayer.GetComponent<TradeComponent>();
+                TradeComponent? partnerComp = ComponentManager.Get(partnerPlayer);
+                if (partnerComp == null)
+                    return false;
                 
                 if (partnerComp.State == ETradeState.FINISHED)
                 {
